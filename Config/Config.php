@@ -2,8 +2,10 @@
 
 //Variables constantes acceder a directorios
 
-//define("BASE_URL", "http://localhost/tienda_virtual/");
-const BASE_URL = "http://localhost/tienda_virtual";
+
+//const BASE_URL = "http://localhost/tienda_virtual";
+//url en la nube
+const BASE_URL = "https://rey8400.github.io/tienda_virtual";
 
 //Zona horaria
 date_default_timezone_set('America/El_Salvador');
