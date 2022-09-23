@@ -4,10 +4,21 @@
 		public function __construct()
 		{
 			parent::__construct();
+
+			session_start();
+			if(empty($_SESSION['login']))
+			{
+				header('Location: '.base_url().'/login');
+			}
+			getPermisos(2);
 		}
 
 		public function Usuarios()
 		{
+
+			if(empty($_SESSION['permisosMod']['r'])){ 
+				header("Location:".base_url().'/dashboard');
+			 }
 			$data['page_tag'] = "Usuarios";
 			$data['page_title'] = "USUARIOS <small>Kayfa Store</small>";
 			$data['page_name'] = "usuarios";
@@ -78,9 +89,8 @@
 		}
 
 
-		public function getUsuarios(){
-
-
+		public function getUsuarios()
+		{
 			$arrData = $this->model->selectUsuarios();
 
 			for ($i=0; $i < count($arrData); $i++) {
@@ -102,9 +112,7 @@
 			
 			echo json_encode($arrData,JSON_UNESCAPED_UNICODE);
 			die();
-
 		}
-
 
 		public function getUsuario(int $idpersona){
 			

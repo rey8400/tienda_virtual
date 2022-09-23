@@ -32,6 +32,17 @@ function footerAdmin($data=""){
     
 
 }
+ //funcionn para  que  se  vea laa  vista header
+ function headerTienda($data=""){
+    $view_header =  "Views/Template/header_tienda.php";
+    require_once($view_header);
+    }
+    
+    //funncion  para  que  se veaa la vista footer
+    function footerTienda($data=""){
+        $view_footer =  "Views/Template/footer_tienda.php";
+        require_once($view_footer);
+        }
 
 //Muestra informacion formateada
 function dep($data){
@@ -54,6 +65,33 @@ function getModal(string $nameModal, $data){
 
 }
 
+function getPermisos(int $idmodulo){
+    require_once ("Models/PermisosModel.php");
+    $objPermisos = new PermisosModel();
+    $idrol = $_SESSION['userData']['idrol'];
+    $arrPermisos = $objPermisos->permisosModulo($idrol);
+    $permisos = '';
+    $permisosMod = '';
+    if(count($arrPermisos) > 0 ){
+        $permisos = $arrPermisos;
+        $permisosMod = isset($arrPermisos[$idmodulo]) ? $arrPermisos[$idmodulo] : "";
+    }
+    $_SESSION['permisos'] = $permisos;
+    $_SESSION['permisosMod'] = $permisosMod;
+}
+
+
+function uploadImage(array $data, string $name){
+    $url_temp = $data['tmp_name'];
+    $destino    = 'Assets/images/uploads/'.$name;        
+    $move = move_uploaded_file($url_temp, $destino);
+    return $move;
+}
+
+function deleteFile(string $name){
+    unlink('Assets/images/uploads/'.$name);
+}
+ 
  //Elimina exceso de espacios entre palabras - Evita inyecciones sql en los formularios
  function strClean($strCadena){
     $string = preg_replace(['/\s+/','/^\s|\s$/'],[' ',''], $strCadena);

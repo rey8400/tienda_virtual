@@ -14,7 +14,7 @@
       <div class="row">
         <div class="col-md-12">
           <div class="tile">
-            <div class="tile-body">Create a beautiful dashboard</div>
+            <div class="tile-body">Dashboard Kayfa Store</div>
           </div>
         </div>
       </div>

@@ -56,6 +56,8 @@
 
 		public function selectUsuarios()
 		{
+
+			
 			$sql = "SELECT p.idpersona,p.identificacion,p.nombres,p.apellidos,p.telefono,p.email_user,p.status,r.nombrerol 
 					FROM persona p 
 					INNER JOIN rol r

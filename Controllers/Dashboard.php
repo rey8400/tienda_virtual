@@ -6,6 +6,14 @@ class Dashboard extends Controllers{
         
         parent::__construct(); //herencia de la clase Controllers
 
+
+			session_start();
+			if(empty($_SESSION['login']))
+			{
+				header('Location: '.base_url().'/login');
+			}
+      
+            getPermisos(1);
     }
 
 
@@ -15,6 +23,7 @@ class Dashboard extends Controllers{
         $data['page_tag'] = "Dashboard-Kayfa";
         $data['page_title'] = "Dashboard-Kayfa";
         $data['page_name'] = "dashboard";
+        $data['page_functions_js'] = "functions_admin.js";
 
       
         $this->views->getView($this,"dashboard",$data);

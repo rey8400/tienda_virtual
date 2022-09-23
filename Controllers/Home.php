@@ -1,29 +1,24 @@
-<?php
+<?php 
+require_once("Models/TCategorias.php");
+require_once("Models/TProducto.php");
+	class Home extends Controllers{
+		use TCategorias, TProducto;
+		public function __construct()
+		{
+			parent::__construct();
+		}
 
-class Home extends Controllers{
+		public function home()
+		{
+			
+			
+			$data['page_tag'] = "KayfaStore";
+			$data['page_title'] = "Página principal";
+			$data['page_name'] = "home";
+			$data['slider']   = $this->getCategorias(CAT_SLIDER);
+			$data['productos'] =  $this->getProductos(CAT_SLIDER);
+			$this->views->getView($this,"home",$data);
+		}
 
-    public function __construct(){
-        
-        parent::__construct(); //herencia de la clase Controllers
-
-    }
-
-
-    public function home(){
-
-        $data['id'] = 1;
-        $data['page_tag'] = "Home";
-        $data['page_title'] = "Pagina Principal";
-        $data['page_name'] = "home";
-
-      
-        $this->views->getView($this,"home",$data);
-    }
-
-   
-
-}
-
-
-
-?>
+	}
+ ?>
