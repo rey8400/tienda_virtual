@@ -36,9 +36,6 @@
 
 			for ($i=0; $i < count($arrData); $i++) {
 
-				$btnView = '';
-				$btnEdit = '';
-				$btnDelete = '';
 				if($arrData[$i]['status'] == 1)
 				{
 					$arrData[$i]['status'] = '<span class="badge badge-success">Activo</span>';
@@ -46,19 +43,11 @@
 					$arrData[$i]['status'] = '<span class="badge badge-danger">Inactivo</span>';
 				}
 
-			
-				if($_SESSION['permisosMod']['u']){
-					$btnView = '<button class="btn btn-secondary btn-sm btnPermisosRol" rl="'.$arrData[$i]['idrol'].'" title="Permisos"><i class="fas fa-key"></i></button>';
-						$btnEdit = '<button class="btn btn-primary btn-sm btnEditRol" rl="'.$arrData[$i]['idrol'].'" title="Editar"><i class="fas fa-pencil-alt"></i></button>';
-				}
-				
-				if($_SESSION['permisosMod']['d']){
-				 $btnDelete = '<button class="btn btn-danger btn-sm btnDelRol" rl="'.$arrData[$i]['idrol'].'" title="Eliminar"><i class="far fa-trash-alt"></i></button>';
-			}
-			
-				$arrData[$i]['options'] = '<div class="text-center">'.$btnView.' '.$btnEdit.' '.$btnDelete.' </div>';
-
-			
+				$arrData[$i]['options'] = '<div class="text-center">
+				<button class="btn btn-secondary btn-sm btnPermisosRol" rl="'.$arrData[$i]['idrol'].'" title="Permisos"><i class="fas fa-key"></i></button>
+				<button class="btn btn-primary btn-sm btnEditRol" rl="'.$arrData[$i]['idrol'].'" title="Editar"><i class="fas fa-pencil-alt"></i></button>
+				<button class="btn btn-danger btn-sm btnDelRol" rl="'.$arrData[$i]['idrol'].'" title="Eliminar"><i class="far fa-trash-alt"></i></button>
+				</div>';
 			}
 			echo json_encode($arrData,JSON_UNESCAPED_UNICODE);
 			die();
