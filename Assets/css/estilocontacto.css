@@ -1,0 +1,75 @@
+
+  .form input {
+    width: 90%;
+    height: 30px;
+    margin: 0.5rem;
+  }
+  
+  #form  {
+    background-color: #fff;
+    width:100%;
+    max-width: 500px;
+    margin: auto;
+    padding: 4.5em 3em;
+    border-radius: 10px;
+    box-shadow: 0 5px  10px -5px rgb(0 0 0 /30%);
+}
+  #body1
+  {
+  
+opacity: 0.6;
+background-image: radial-gradient(circle at center center, #858585, #5b5b62), repeating-radial-gradient(circle at center center, #858585, #858585, 10px, transparent 20px, transparent 10px);
+background-blend-mode: multiply;
+  
+   
+  }
+  .form_container{
+    margin-top: 3em;
+    display: grid;
+    gap: 2.5 em;
+  }
+  .form-group{
+    position: relative;
+    --color: #5757577e;
+  }
+  .form_input{
+    width: 100%;
+    background: none;
+    color: #706c6c;
+    font-size: 1rem;
+    padding: .6em .3em;
+    border: none;
+    outline: none;
+    border-bottom: 1px solid var(--color);
+  }
+  .form_input + .form_label{
+    transform: translateY(-12px) scale(.7);
+    transform-origin: left top;
+    color: green;
+  }
+
+  .form_label1{
+    color : green;
+    font-size: 1rem;
+  }
+  .form_label{
+    color : green;
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    left: 5px;
+    transform: translateY(10px);
+    transition: transform .5s, color .3s ;
+  }
+  .form_submit{
+    background: green;
+    color: #fff;
+    font-weight:300;
+    font-size:1rem;
+    
+    border: none;
+    border-radius: .5em;
+    box-shadow: 0 5px  10px -5px rgb(0 0 0 /30%);
+
+  }
+ 

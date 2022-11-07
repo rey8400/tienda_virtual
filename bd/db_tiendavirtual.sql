@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 23-09-2022 a las 20:30:16
+-- Tiempo de generación: 07-11-2022 a las 03:37:35
 -- Versión del servidor: 10.4.17-MariaDB
 -- Versión de PHP: 7.4.13
 
@@ -42,7 +42,30 @@ CREATE TABLE `categoria` (
 
 INSERT INTO `categoria` (`idcategoria`, `nombre`, `descripcion`, `portada`, `datecreated`, `status`) VALUES
 (1, 'Equipo Informatico Gaming 3', 'Equipos informaticos, teclado, mouse, cpu.', 'img_3f7bffd656f16fe290ba0d28c2c020bc.jpg', '2022-09-22 22:17:26', 1),
-(2, 'Audifonos 2', 'Audifonos de todo tipo', 'img_54ffeef38c01ca0e7c635096897d2573.jpg', '2022-09-22 22:35:17', 1);
+(2, 'Audifonos 2', 'Audifonos de todo tipo', 'img_54ffeef38c01ca0e7c635096897d2573.jpg', '2022-09-22 22:35:17', 1),
+(3, 'Laptops', 'Laptos gamer, de oficina', 'img_7e16601e6104ec6c655c3a29f0e7e257.jpg', '2022-11-06 19:40:32', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `cometarios`
+--
+
+CREATE TABLE `cometarios` (
+  `id` int(11) NOT NULL,
+  `usuario` varchar(50) COLLATE utf8mb4_swedish_ci DEFAULT NULL,
+  `cometario` varchar(500) COLLATE utf8mb4_swedish_ci DEFAULT NULL,
+  `id_post` int(11) DEFAULT NULL,
+  `fecha` varchar(50) COLLATE utf8mb4_swedish_ci DEFAULT NULL,
+  `estado` varchar(2) COLLATE utf8mb4_swedish_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_swedish_ci;
+
+--
+-- Volcado de datos para la tabla `cometarios`
+--
+
+INSERT INTO `cometarios` (`id`, `usuario`, `cometario`, `id_post`, `fecha`, `estado`) VALUES
+(1, 'Daniel', 'Yo te recomiendo una Laptop hp 15 pavillion', 5, '06-11-2022 17:53:42', 'no');
 
 -- --------------------------------------------------------
 
@@ -58,6 +81,16 @@ CREATE TABLE `detalle_pedido` (
   `cantidad` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_swedish_ci;
 
+--
+-- Volcado de datos para la tabla `detalle_pedido`
+--
+
+INSERT INTO `detalle_pedido` (`id`, `pedidoid`, `productoid`, `precio`, `cantidad`) VALUES
+(14, 13, 7, '20.00', 1),
+(15, 13, 9, '40.99', 1),
+(16, 14, 7, '20.00', 1),
+(17, 15, 9, '40.99', 1);
+
 -- --------------------------------------------------------
 
 --
@@ -66,10 +99,11 @@ CREATE TABLE `detalle_pedido` (
 
 CREATE TABLE `detalle_temp` (
   `id` bigint(20) NOT NULL,
+  `personaid` bigint(20) NOT NULL,
   `productoid` bigint(20) NOT NULL,
   `precio` decimal(11,2) NOT NULL,
   `cantidad` int(11) NOT NULL,
-  `token` varchar(100) COLLATE utf8mb4_swedish_ci NOT NULL
+  `transaccionid` varchar(255) COLLATE utf8mb4_swedish_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_swedish_ci;
 
 -- --------------------------------------------------------
@@ -89,7 +123,16 @@ CREATE TABLE `imagen` (
 --
 
 INSERT INTO `imagen` (`id`, `productoid`, `img`) VALUES
-(5, 7, 'pro_e43a84ea74d954a13be22caeb98bf59c.jpg');
+(5, 7, 'pro_e43a84ea74d954a13be22caeb98bf59c.jpg'),
+(6, 8, 'pro_5b05f06d59313b7ed9c13cb26281c1b5.jpg'),
+(7, 9, 'pro_c9f797f9d62250f4f51b4b5a6c304c51.jpg'),
+(8, 10, 'pro_85a4fba4b968e61c4e34417bd00245f4.jpg'),
+(9, 11, 'pro_1c41b81aa2a007559c7d4cce7540ce6c.jpg'),
+(11, 12, 'pro_04c0ca6f65c96582b9c9ba0c01573f80.jpg'),
+(12, 13, 'pro_3740faa1e1c3f66148c4f8899d035566.jpg'),
+(13, 14, 'pro_8cbad07cf2c217c515f44d81accbf5de.jpg'),
+(14, 15, 'pro_2bd917f7b4014b345a278d2e72006f0d.jpg'),
+(15, 16, 'pro_4d59b1460804c65acbde912c4b04bb1c.jpg');
 
 -- --------------------------------------------------------
 
@@ -124,12 +167,26 @@ INSERT INTO `modulo` (`idmodulo`, `titulo`, `descripcion`, `status`) VALUES
 
 CREATE TABLE `pedido` (
   `idpedido` bigint(20) NOT NULL,
+  `referenciacobro` varchar(255) COLLATE utf8mb4_swedish_ci DEFAULT NULL,
+  `idtransaccionpaypal` varchar(255) COLLATE utf8mb4_swedish_ci DEFAULT NULL,
+  `datospaypal` text COLLATE utf8mb4_swedish_ci DEFAULT NULL,
   `personaid` bigint(20) NOT NULL,
   `fecha` datetime NOT NULL DEFAULT current_timestamp(),
+  `costo_envio` decimal(10,2) NOT NULL DEFAULT 0.00,
   `monto` decimal(11,2) NOT NULL,
   `tipopagoid` bigint(20) NOT NULL,
-  `status` int(11) NOT NULL DEFAULT 1
+  `direccion_envio` text COLLATE utf8mb4_swedish_ci NOT NULL,
+  `status` varchar(100) COLLATE utf8mb4_swedish_ci NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_swedish_ci;
+
+--
+-- Volcado de datos para la tabla `pedido`
+--
+
+INSERT INTO `pedido` (`idpedido`, `referenciacobro`, `idtransaccionpaypal`, `datospaypal`, `personaid`, `fecha`, `costo_envio`, `monto`, `tipopagoid`, `direccion_envio`, `status`) VALUES
+(13, NULL, NULL, NULL, 21, '2022-11-06 14:38:17', '10.00', '70.99', 2, 'Centro de usulutan parque municpal, Usulutan, Usulutan', 'Pendiente'),
+(14, NULL, NULL, NULL, 12, '2022-11-06 14:39:29', '10.00', '30.00', 2, 'Metrocentro san Miguel, San Miguel, San Miguel', 'Pendiente'),
+(15, NULL, NULL, NULL, 12, '2022-11-06 14:59:02', '10.00', '50.99', 2, 'Centro de Usulutan Alcaldia Municipal, Usulutan, Usulutan', 'Pendiente');
 
 -- --------------------------------------------------------
 
@@ -213,7 +270,32 @@ INSERT INTO `persona` (`idpersona`, `identificacion`, `nombres`, `apellidos`, `t
 (8, '22222', 'Daniel', 'Romero', 8787878, 'dan@gmail.com', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', '', '', '', '', 2, '2022-09-22 12:50:31', 0),
 (9, '12333', 'Rey', 'Pana', 11111, 'a@gmail.com', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', '11111', 'reyna', 'mi casa', '', 7, '2022-09-22 15:16:26', 0),
 (10, '333', 'Carlos', 'Perez', 45353, 'perez@gmail.com', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', '342432', 'rewrwe', 'fsdfsfsf', '', 7, '2022-09-22 16:36:08', 1),
-(11, '65655', 'Migueles', 'Ayalas', 42342345, 'migueles@gmail.com', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', '4234235', 'migue5', 'sdasdasdsada5', '', 7, '2022-09-22 16:37:18', 1);
+(11, '65655', 'Migueles', 'Ayalas', 42342345, 'migueles@gmail.com', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', '4234235', 'migue5', 'sdasdasdsada5', '', 7, '2022-09-22 16:37:18', 1),
+(12, '2131232', 'Daniel', 'Romero', 32323, 'daniel@gmail.com', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', '', '', '', '', 7, '2022-10-30 16:40:36', 1),
+(21, '', 'Carlos', 'Posada', 7861665, 'carlos@gmail.com', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', '', '', '', '', 7, '2022-11-06 14:27:22', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `post`
+--
+
+CREATE TABLE `post` (
+  `id` int(11) NOT NULL,
+  `tutulo` varchar(50) COLLATE utf8mb4_swedish_ci DEFAULT NULL,
+  `descripcion` varchar(50) COLLATE utf8mb4_swedish_ci DEFAULT NULL,
+  `contenido` varchar(1000) COLLATE utf8mb4_swedish_ci DEFAULT NULL,
+  `autor` varchar(50) COLLATE utf8mb4_swedish_ci DEFAULT NULL,
+  `fecha` varchar(50) COLLATE utf8mb4_swedish_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_swedish_ci;
+
+--
+-- Volcado de datos para la tabla `post`
+--
+
+INSERT INTO `post` (`id`, `tutulo`, `descripcion`, `contenido`, `autor`, `fecha`) VALUES
+(2, 'Tarjetas Graficas', 'Quisiera saber cual es la mejor tarjeta Grafica', 'Recomendaciones', 'Daniel', '31-10-2022 00:57:12'),
+(5, 'Recomendacion de PC', 'Tecnologia pc', 'Hola que tipo de laptop me recomiendan para la universidad', 'Carlos', '06-11-2022 17:49:38');
 
 -- --------------------------------------------------------
 
@@ -239,7 +321,16 @@ CREATE TABLE `producto` (
 --
 
 INSERT INTO `producto` (`idproducto`, `categoriaid`, `codigo`, `nombre`, `descripcion`, `precio`, `stock`, `imagen`, `datecreated`, `status`) VALUES
-(7, 2, '2525252', 'Audifonos Sony', '<p>Audifonos Sony v. 5.00</p>', '20.00', 15, '', '2022-09-23 12:16:05', 1);
+(7, 2, '2525252', 'Audifonos Sony', '<p>Audifonos Sony v. 5.00</p>', '20.00', 15, '', '2022-09-23 12:16:05', 1),
+(8, 1, '123456', 'Mouse Gamer', '<p>Mouse Gamer</p>', '20.99', 20, '', '2022-10-29 14:40:10', 1),
+(9, 1, '349111555', 'Teclado Gamer', '<ul> <li>Teclado gamer</li> <li>Mecanico</li> <li>Luces led</li> </ul>', '40.99', 50, '', '2022-10-29 16:45:04', 1),
+(10, 3, '465487464', 'Laptop HP Pavilion x360', '<p><span style=\"color: #2c3038; font-family: forma-djr-micro, Arial, sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: #f3f3f3; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;\">HP Pavilion x360 Convertible 14-dy0003la, Windows 11 Home Single Language,&nbsp;14\",&nbsp;pantalla t&aacute;ctil,&nbsp;Intel&reg; Core&trade; i3,&nbsp;4GB RAM,&nbsp;256GB SSD,&nbsp;HD,&nbsp;Azul profundo</span></p>', '600.00', 200, '', '2022-11-06 19:48:21', 1),
+(11, 1, '5466451', 'HP V24i FHD Monitor', '<ul> <li><span style=\"color: #2c3038; font-family: FormaDJRMicro, -apple-system, BlinkMacSystemFont, sans-serif; font-size: 16px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;\">FHD (1920 x 1080)</span></li> <li><span style=\"color: #2c3038; font-family: FormaDJRMicro, -apple-system, BlinkMacSystemFont, sans-serif; font-size: 16px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;\">No integrated camera</span></li> <li><span style=\"color: #2c3038; font-family: FormaDJRMicro, -apple-system, BlinkMacSystemFont, sans-serif; font-size: 16px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;\">21.24 x 1.87 x 12.8 inWithout stand.</span></li> </ul>', '120.00', 100, '', '2022-11-06 19:51:43', 1),
+(12, 1, '654646456', 'Laptop Gamer Acer Nitro 5 AN515-55-71GU', '<p><span style=\"color: #303030; font-family: Montserrat-Bold; font-size: 18px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: #ffffff; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;\">Laptop Gamer Acer Nitro 5 AN515-55-71GU / GeForce GTX 1650 / Intel Core i7 10ma Gen / 15.6 Pulg. / 1tb / 256gb SSD / 16gb RAM / Negro</span></p>', '1200.00', 50, '', '2022-11-06 19:55:07', 1),
+(13, 1, '84554144', 'Teclado Mecánico Xtrike Me GK-979', '<p><span style=\"color: #6c757d; font-family: Roboto, \'Odoo Unicode Support Noto\', sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: #ffffff; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;\">Teclado de juego mec&aacute;nico</span><br style=\"box-sizing: border-box; color: #6c757d; font-family: Roboto, \'Odoo Unicode Support Noto\', sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: #ffffff; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\" /><span style=\"color: #6c757d; font-family: Roboto, \'Odoo Unicode Support Noto\', sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: #ffffff; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;\">Llaves: 87</span><br style=\"box-sizing: border-box; color: #6c757d; font-family: Roboto, \'Odoo Unicode Support Noto\', sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: #ffffff; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\" /><span style=\"color: #6c757d; font-family: Roboto, \'Odoo Unicode Support Noto\', sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: #ffffff; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;\">Clasificaci&oacute;n de conmutaci&oacute;n: 50 millones de prensas</span><br style=\"box-sizing: border-box; color: #6c757d; font-family: Roboto, \'Odoo Unicode Support Noto\', sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: #ffffff; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\" /><span style=\"color: #6c757d; font-family: Roboto, \'Odoo Unicode Support Noto\', sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: #ffffff; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;\">Ruta clave: 4,0 a 0,4 MM</span><br style=\"box-sizing: border-box; color: #6c757d; font-family: Roboto, \'Odoo Unicode Support Noto\', sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: #ffffff; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\" /><span style=\"color: #6c757d; font-family: Roboto, \'Odoo Unicode Support Noto\', sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: #ffffff; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;\">Fuerza de funcionamiento: 60 a 5 G</span><br style=\"box-sizing: border-box; color: #6c757d; font-family: Roboto, \'Odoo Unicode Support Noto\', sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: #ffffff; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\" /><span style=\"color: #6c757d; font-family: Roboto, \'Odoo Unicode Support Noto\', sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: #ffffff; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;\">Luz de fondo: arco iris de 5 colores con 8 modos de iluminaci&oacute;n</span><br style=\"box-sizing: border-box; color: #6c757d; font-family: Roboto, \'Odoo Unicode Support Noto\', sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: #ffffff; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\" /><span style=\"color: #6c757d; font-family: Roboto, \'Odoo Unicode Support Noto\', sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: #ffffff; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;\">Interfaz: USB2.0</span><br style=\"box-sizing: border-box; color: #6c757d; font-family: Roboto, \'Odoo Unicode Support Noto\', sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: #ffffff; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\" /><span style=\"color: #6c757d; font-family: Roboto, \'Odoo Unicode Support Noto\', sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: #ffffff; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;\">Longitud del cable: 1.5M</span><br style=\"box-sizing: border-box; color: #6c757d; font-family: Roboto, \'Odoo Unicode Support Noto\', sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: #ffffff; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\" /><span style=\"color: #6c757d; font-family: Roboto, \'Odoo Unicode Support Noto\', sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: #ffffff; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;\">Compatibilidad con el sistema operativo: Windows 7 o posterior</span><br style=\"box-sizing: border-box; color: #6c757d; font-family: Roboto, \'Odoo Unicode Support Noto\', sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: #ffffff; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\" /><span style=\"color: #6c757d; font-family: Roboto, \'Odoo Unicode Support Noto\', sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: #ffffff; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;\">Funciones:</span><br style=\"box-sizing: border-box; color: #6c757d; font-family: Roboto, \'Odoo Unicode Support Noto\', sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: #ffffff; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\" /><span style=\"color: #6c757d; font-family: Roboto, \'Odoo Unicode Support Noto\', sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: #ffffff; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;\">Teclas FN para la funci&oacute;n Multimedia;</span><br style=\"box-sizing: border-box; color: #6c757d; font-family: Roboto, \'Odoo Unicode Support Noto\', sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: #ffffff; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\" /><span style=\"color: #6c757d; font-family: Roboto, \'Odoo Unicode Support Noto\', sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: #ffffff; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;\">FN+WIN, funci&oacute;n de bloqueo WIN;</span><br style=\"box-sizing: border-box; color: #6c757d; font-family: Roboto, \'Odoo Unicode Support Noto\', sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: #ffffff; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\" /><span style=\"color: #6c757d; font-family: Roboto, \'Odoo Unicode Support Noto\', sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: #ffffff; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;\">Soporte anti-fantasma 29 teclas rollover</span></p>', '49.00', 100, '', '2022-11-06 19:58:09', 1),
+(14, 1, '4484787', 'Logitech G203 RGB', '<table class=\"a-normal a-spacing-micro\" style=\"box-sizing: border-box; margin-bottom: 4px !important; border-collapse: collapse; width: 366.812px; color: #0f1111; font-family: \'Amazon Ember\', Arial, sans-serif; font-size: 14px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: #ffffff; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\"> <tbody style=\"box-sizing: border-box;\"> <tr class=\"a-spacing-small po-brand\" style=\"box-sizing: border-box; margin-bottom: 8px !important;\"> <td class=\"a-span3\" style=\"box-sizing: border-box; vertical-align: top; padding: 0px 3px 3px 0px; float: none !important; margin-right: 0px; width: 98.7188px;\"><span class=\"a-size-base a-text-bold\" style=\"box-sizing: border-box; font-weight: 700 !important; font-size: 14px !important; line-height: 20px !important;\">Marca</span></td> <td class=\"a-span9\" style=\"box-sizing: border-box; vertical-align: top; padding: 0px 0px 3px 3px; float: none !important; margin-right: 0px; width: 268.094px;\"><span class=\"a-size-base\" style=\"box-sizing: border-box; font-size: 14px !important; line-height: 20px !important;\">Logitech G</span></td> </tr> <tr class=\"a-spacing-small po-color\" style=\"box-sizing: border-box; margin-bottom: 8px !important;\"> <td class=\"a-span3\" style=\"box-sizing: border-box; vertical-align: top; padding: 3px 3px 3px 0px; float: none !important; margin-right: 0px; width: 98.7188px;\"><span class=\"a-size-base a-text-bold\" style=\"box-sizing: border-box; font-weight: 700 !important; font-size: 14px !important; line-height: 20px !important;\">Color</span></td> <td class=\"a-span9\" style=\"box-sizing: border-box; vertical-align: top; padding: 3px 0px 3px 3px; float: none !important; margin-right: 0px; width: 268.094px;\"><span class=\"a-size-base\" style=\"box-sizing: border-box; font-size: 14px !important; line-height: 20px !important;\">Negro</span></td> </tr> <tr class=\"a-spacing-small po-connectivity_technology\" style=\"box-sizing: border-box; margin-bottom: 8px !important;\"> <td class=\"a-span3\" style=\"box-sizing: border-box; vertical-align: top; padding: 3px 3px 3px 0px; float: none !important; margin-right: 0px; width: 98.7188px;\"><span class=\"a-size-base a-text-bold\" style=\"box-sizing: border-box; font-weight: 700 !important; font-size: 14px !important; line-height: 20px !important;\">Tecnolog&iacute;a de conectividad</span></td> <td class=\"a-span9\" style=\"box-sizing: border-box; vertical-align: top; padding: 3px 0px 3px 3px; float: none !important; margin-right: 0px; width: 268.094px;\"><span class=\"a-size-base\" style=\"box-sizing: border-box; font-size: 14px !important; line-height: 20px !important;\">USB</span></td> </tr> <tr class=\"a-spacing-small po-special_feature\" style=\"box-sizing: border-box; margin-bottom: 8px !important;\"> <td class=\"a-span3\" style=\"box-sizing: border-box; vertical-align: top; padding: 3px 3px 3px 0px; float: none !important; margin-right: 0px; width: 98.7188px;\"><span class=\"a-size-base a-text-bold\" style=\"box-sizing: border-box; font-weight: 700 !important; font-size: 14px !important; line-height: 20px !important;\">Caracter&iacute;sticas especiales</span></td> <td class=\"a-span9\" style=\"box-sizing: border-box; vertical-align: top; padding: 3px 0px 3px 3px; float: none !important; margin-right: 0px; width: 268.094px;\"><span class=\"a-size-base\" style=\"box-sizing: border-box; font-size: 14px !important; line-height: 20px !important;\">Soundless</span></td> </tr> <tr class=\"a-spacing-small po-movement_detection_technology\" style=\"box-sizing: border-box; margin-bottom: 8px !important;\"> <td class=\"a-span3\" style=\"box-sizing: border-box; vertical-align: top; padding: 3px 3px 0px 0px; float: none !important; margin-right: 0px; width: 98.7188px;\"><span class=\"a-size-base a-text-bold\" style=\"box-sizing: border-box; font-weight: 700 !important; font-size: 14px !important; line-height: 20px !important;\">Tecnolog&iacute;a de detecci&oacute;n de movimiento</span></td> <td class=\"a-span9\" style=\"box-sizing: border-box; vertical-align: top; padding: 3px 0px 0px 3px; float: none !important; margin-right: 0px; width: 268.094px;\"><span class=\"a-size-base\" style=\"box-sizing: border-box; font-size: 14px !important; line-height: 20px !important;\">Optical</span></td> </tr> </tbody> </table>', '15.00', 50, '', '2022-11-06 20:01:14', 1),
+(15, 1, '756785', 'CPU Gamer INTEL', '<p><span style=\"color: #666666; font-family: Poppins, sans-serif; font-size: 13px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: bold; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: #ffffff; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;\">CPU GAMER nuevo!</span><br style=\"box-sizing: inherit; color: #666666; font-family: Poppins, sans-serif; font-size: 13px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: bold; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: #ffffff; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\" /><span style=\"color: #666666; font-family: Poppins, sans-serif; font-size: 13px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: bold; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: #ffffff; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;\">Incluye:</span><br style=\"box-sizing: inherit; color: #666666; font-family: Poppins, sans-serif; font-size: 13px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: bold; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: #ffffff; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\" /><span style=\"color: #666666; font-family: Poppins, sans-serif; font-size: 13px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: bold; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: #ffffff; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;\">&ndash; Procesador Intel Core i3 10100F (10ma generaci&oacute;n) 4 Nucleos 8 Hilos</span><br style=\"box-sizing: inherit; color: #666666; font-family: Poppins, sans-serif; font-size: 13px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: bold; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: #ffffff; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\" /><span style=\"color: #666666; font-family: Poppins, sans-serif; font-size: 13px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: bold; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: #ffffff; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;\">&ndash; Motherboard B560 (Intel 10ma y 11va generacion)</span><br style=\"box-sizing: inherit; color: #666666; font-family: Poppins, sans-serif; font-size: 13px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: bold; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: #ffffff; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\" /><span style=\"color: #666666; font-family: Poppins, sans-serif; font-size: 13px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: bold; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: #ffffff; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;\">&ndash; 256GB SSD ADATA</span><br style=\"box-sizing: inherit; color: #666666; font-family: Poppins, sans-serif; font-size: 13px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: bold; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: #ffffff; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\" /><span style=\"color: #666666; font-family: Poppins, sans-serif; font-size: 13px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: bold; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: #ffffff; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;\">&ndash; 16GB RAM DDR4 XPG Hunter</span><br style=\"box-sizing: inherit; color: #666666; font-family: Poppins, sans-serif; font-size: 13px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: bold; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: #ffffff; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\" /><span style=\"color: #666666; font-family: Poppins, sans-serif; font-size: 13px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: bold; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: #ffffff; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;\">&ndash; Gigabyte GTX1650 4GB</span><br style=\"box-sizing: inherit; color: #666666; font-family: Poppins, sans-serif; font-size: 13px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: bold; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: #ffffff; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\" /><span style=\"color: #666666; font-family: Poppins, sans-serif; font-size: 13px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: bold; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: #ffffff; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;\">&ndash; Fuente de poder EVGA 500W 80+ Bronce Semi modular</span><br style=\"box-sizing: inherit; color: #666666; font-family: Poppins, sans-serif; font-size: 13px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: bold; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: #ffffff; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;\" /><span style=\"color: #666666; font-family: Poppins, sans-serif; font-size: 13px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: bold; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: #ffffff; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;\">&ndash; Case Shard Aerocool con 4 FANS RGB y vidrio templado</span></p>', '800.00', 50, '', '2022-11-06 20:02:50', 1),
+(16, 2, '54454', 'AUDIFONOS GAMING DE DIADEMA ARGOM', '<p><span style=\"color: #333333; font-family: Montserrat-Regular, \'Open Sans\', Helvetica, Arial, sans-serif; font-size: 11.256px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: #ffffff; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;\">AUDIFONOS GAMING DE DIADEMA ARGOM</span></p> <p><span style=\"color: #333333; font-family: Montserrat-Regular, \'Open Sans\', Helvetica, Arial, sans-serif; font-size: 11.256px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: #ffffff; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;\">MEDIDA:PIEZA</span></p> <p><span style=\"color: #333333; font-family: Montserrat-Regular, \'Open Sans\', Helvetica, Arial, sans-serif; font-size: 11.256px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: #ffffff; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;\">MODELO:<span style=\"color: #666666; font-family: Montserrat-Medium; font-size: 12px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: #ffffff; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;\">ARG-HS-2845BK</span></span></p>', '40.00', 100, '', '2022-11-06 20:04:53', 1);
 
 -- --------------------------------------------------------
 
@@ -270,6 +361,26 @@ INSERT INTO `rol` (`idrol`, `nombrerol`, `descripcion`, `status`) VALUES
 (9, 'Coordinador', 'Coordinador', 0),
 (10, 'Consulta Ventas', 'Consulta Ventas', 0);
 
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `tipopago`
+--
+
+CREATE TABLE `tipopago` (
+  `idtipopago` bigint(20) NOT NULL,
+  `tipopago` varchar(100) COLLATE utf8mb4_swedish_ci NOT NULL,
+  `status` int(11) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_swedish_ci;
+
+--
+-- Volcado de datos para la tabla `tipopago`
+--
+
+INSERT INTO `tipopago` (`idtipopago`, `tipopago`, `status`) VALUES
+(1, 'PayPal', 1),
+(2, 'Efectivo', 1);
+
 --
 -- Índices para tablas volcadas
 --
@@ -279,6 +390,12 @@ INSERT INTO `rol` (`idrol`, `nombrerol`, `descripcion`, `status`) VALUES
 --
 ALTER TABLE `categoria`
   ADD PRIMARY KEY (`idcategoria`);
+
+--
+-- Indices de la tabla `cometarios`
+--
+ALTER TABLE `cometarios`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indices de la tabla `detalle_pedido`
@@ -293,7 +410,8 @@ ALTER TABLE `detalle_pedido`
 --
 ALTER TABLE `detalle_temp`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `productoid` (`productoid`);
+  ADD KEY `productoid` (`productoid`),
+  ADD KEY `personaid` (`personaid`);
 
 --
 -- Indices de la tabla `imagen`
@@ -313,7 +431,8 @@ ALTER TABLE `modulo`
 --
 ALTER TABLE `pedido`
   ADD PRIMARY KEY (`idpedido`),
-  ADD KEY `personaid` (`personaid`);
+  ADD KEY `personaid` (`personaid`),
+  ADD KEY `tipopagoid` (`tipopagoid`);
 
 --
 -- Indices de la tabla `permisos`
@@ -331,6 +450,12 @@ ALTER TABLE `persona`
   ADD KEY `rolid` (`rolid`);
 
 --
+-- Indices de la tabla `post`
+--
+ALTER TABLE `post`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indices de la tabla `producto`
 --
 ALTER TABLE `producto`
@@ -344,6 +469,12 @@ ALTER TABLE `rol`
   ADD PRIMARY KEY (`idrol`);
 
 --
+-- Indices de la tabla `tipopago`
+--
+ALTER TABLE `tipopago`
+  ADD PRIMARY KEY (`idtipopago`);
+
+--
 -- AUTO_INCREMENT de las tablas volcadas
 --
 
@@ -351,25 +482,31 @@ ALTER TABLE `rol`
 -- AUTO_INCREMENT de la tabla `categoria`
 --
 ALTER TABLE `categoria`
-  MODIFY `idcategoria` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `idcategoria` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT de la tabla `cometarios`
+--
+ALTER TABLE `cometarios`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `detalle_pedido`
 --
 ALTER TABLE `detalle_pedido`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT de la tabla `detalle_temp`
 --
 ALTER TABLE `detalle_temp`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT de la tabla `imagen`
 --
 ALTER TABLE `imagen`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT de la tabla `modulo`
@@ -381,7 +518,7 @@ ALTER TABLE `modulo`
 -- AUTO_INCREMENT de la tabla `pedido`
 --
 ALTER TABLE `pedido`
-  MODIFY `idpedido` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `idpedido` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT de la tabla `permisos`
@@ -393,19 +530,31 @@ ALTER TABLE `permisos`
 -- AUTO_INCREMENT de la tabla `persona`
 --
 ALTER TABLE `persona`
-  MODIFY `idpersona` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `idpersona` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+
+--
+-- AUTO_INCREMENT de la tabla `post`
+--
+ALTER TABLE `post`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `producto`
 --
 ALTER TABLE `producto`
-  MODIFY `idproducto` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `idproducto` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT de la tabla `rol`
 --
 ALTER TABLE `rol`
   MODIFY `idrol` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT de la tabla `tipopago`
+--
+ALTER TABLE `tipopago`
+  MODIFY `idtipopago` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Restricciones para tablas volcadas
@@ -434,7 +583,8 @@ ALTER TABLE `imagen`
 -- Filtros para la tabla `pedido`
 --
 ALTER TABLE `pedido`
-  ADD CONSTRAINT `pedido_ibfk_1` FOREIGN KEY (`personaid`) REFERENCES `persona` (`idpersona`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `pedido_ibfk_1` FOREIGN KEY (`personaid`) REFERENCES `persona` (`idpersona`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `pedido_ibfk_2` FOREIGN KEY (`tipopagoid`) REFERENCES `tipopago` (`idtipopago`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `permisos`

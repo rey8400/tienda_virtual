@@ -1,8 +1,9 @@
 <?php headerTienda($data); 
-	getModal('modalCarrito',$data);
+	
 	$arrSlider = $data['slider'];
 
 	$arrProductos = $data['productos'];
+	//dep($arrProductos);
 	
 ?>
 <link rel="stylesheet" type="text/css" href="<?=media();?>/css/menu.css">
@@ -60,10 +61,10 @@
 				<?php
 				for($p=0;$p<count($arrProductos);$p++){
 					if(count($arrProductos[$p]['images'])>0){
-							$portada = $arrProductos[$p]['images'][0]['url_image'];
+							$portada1 = $arrProductos[$p]['images'][0]['url_image'];
 
 					}else{
-						$portada = media().'/images/uploads/portada_categoria.png';
+						$portada1 = media().'/images/uploads/portada_categoria.png';
 					}
 
 				
@@ -72,9 +73,9 @@
 					<!-- Block2 -->
 					<div class="block2">
 						<div class="block2-pic hov-img0">
-							<img src="<?= $portada ?>" alt="<?= $arrProductos[$p]['nombre']?>">
+							<img src="<?= $portada1 ?>" alt="<?= $arrProductos[$p]['nombre']?>">
 
-							<a style="display: none;" href="<?=base_url().'/tienda/producto/'.$arrProductos[$p]['nombre'];?>" class="block2-btn flex-c-m stext-103 cl22 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 ">
+							<a href="<?=base_url().'/tienda/producto/'.$arrProductos[$p]['nombre'];?>" class="block2-btn flex-c-m stext-103 cl22 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 ">
 								Ver  producto
 							</a>
 						</div>
@@ -90,7 +91,7 @@
 								</span>
 							</div>
 
-							<div style="display: none;" class="block2-txt-child2 flex-r p-t-3">
+							<div class="block2-txt-child2 flex-r p-t-3" style="display: none;">
 								<a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
 									<img class="icon-heart1 dis-block trans-04" src="<?=media();?>/tienda/images/icons/icon-heart-01.png" alt="ICON">
 									<img class="icon-heart2 dis-block trans-04 ab-t-l" src="<?=media();?>/tienda/images/icons/icon-heart-02.png" alt="ICON">

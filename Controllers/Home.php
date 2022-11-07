@@ -6,6 +6,7 @@ require_once("Models/TProducto.php");
 		public function __construct()
 		{
 			parent::__construct();
+			session_start();
 		}
 
 		public function home()

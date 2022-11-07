@@ -5,7 +5,8 @@ trait TProducto{
     private $con;
     private $strCategoria;
     private $intIdCategoria;
-    private   $strProducto;
+    private $strProducto;
+    private $intIdProducto;
     private $cant;
     private $option;
     public function getProductos(){
@@ -184,6 +185,103 @@ public function getProductoT(string $producto){
 
     return $request;
  }
+
+
+
+ public function getProductoIDT(int $idproducto){
+    $this->con = new Mysql();
+    $this->intIdProducto = $idproducto;
+     $sql = "SELECT p.idproducto,
+                     p.codigo,
+                     p.nombre,
+                     p.descripcion,
+                     p.categoriaid,
+                     c.nombre as categoria,
+                     p.precio,
+                     p.stock
+             FROM producto p 
+             INNER JOIN categoria c
+             ON p.categoriaid = c.idcategoria
+             WHERE p.status != 0 AND p.idproducto= '{$this->intIdProducto}' ";
+             $request = $this->con->select($sql);
+             if(!empty($request)){
+                
+                     $intIdProducto =  $request['idproducto'];
+                     $sqlImg = "SELECT img
+                 FROM imagen
+                 WHERE productoid = $intIdProducto";
+         $arrImg = $this->con->select_all($sqlImg);
+
+         if(count($arrImg)>0){
+             for($c=0;$c<count($arrImg);$c++){
+                 $arrImg[$c]['url_image'] = media().'/images/uploads/'.$arrImg[$c]['img'];
+             }
+
+         }
+         $request['images'] =  $arrImg;
+                 
+
+             }
+     return $request;
+     
+ }	
+
+ public function cantProdSearch($busqueda){
+
+    $this->con = new Mysql();
+    $sql = "SELECT COUNT(*) as total_registro FROM producto  WHERE nombre LIKE '%$busqueda%' AND status  =  1";
+
+
+   $result_register = $this->con->select($sql);
+   $total_registro = $result_register;
+
+
+   return $total_registro;
+ }
+
+ public function getProdSearch($busqueda,$desde,$porpaginar){
+    $this->con  = new Mysql();
+
+     $sql = "SELECT p.idproducto,
+                   p.codigo,
+                   p.nombre,
+                   p.descripcion,
+                   p.categoriaid,
+                   c.nombre  as categoria,
+                   p.precio,
+                   p.stock
+            FROM producto p
+            INNER JOIN  categoria c
+            ON p.categoriaid = c.idcategoria
+            WHERE p.status = 1 AND p.nombre LIKE '%$busqueda%' ORDER BY p.idproducto DESC LIMIT $desde,$porpaginar";
+
+                $request = $this->con->select_all($sql);
+                if(count($request)>0){
+                    for($i=0 ; $i<count($request);$i++){
+                        $intIdProducto =  $request[$i]['idproducto'];
+                        $sqlImg = "SELECT img
+                    FROM imagen
+                    WHERE productoid = $intIdProducto";
+            $arrImg = $this->con->select_all($sqlImg);
+    
+            if(count($arrImg)>0){
+                for($c=0;$c<count($arrImg);$c++){
+                    $arrImg[$c]['url_image'] = media().'/images/uploads/'.$arrImg[$c]['img'];
+                }
+    
+            }
+            $request[$i]['images'] =  $arrImg;
+                    }
+    
+                }
+    
+        
+    
+        return $request;
+
+ }
+
+
 
 }
 

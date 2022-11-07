@@ -1,3 +1,12 @@
+<?php 
+	$cantCarrito = 0;
+	if(isset($_SESSION['arrCarrito']) and count($_SESSION['arrCarrito']) > 0){ 
+		foreach($_SESSION['arrCarrito'] as $product) {
+			$cantCarrito += $product['cantidad'];
+		}
+	}
+ ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -34,9 +43,14 @@
 	<link rel="stylesheet" type="text/css" href="<?=media();?>/tienda/css/util.css">
 	<link rel="stylesheet" type="text/css" href="<?=media();?>/tienda/css/main.css">
     <link rel="stylesheet" type="text/css" href="<?=media();?>/tienda/css/style.css">
+	<link rel="stylesheet" type="text/css" href="<?=media();?>/css/style.css">
+	<link rel="stylesheet" type="text/css" href="<?=media();?>/css/menu.css">
+	
 <!--===============================================================================================-->
 </head>
 <body class="animsition">
+
+<?php  getModal('modalSesion',$data); ?>
 	
 	<!-- Header -->
 	<header>
@@ -52,19 +66,31 @@
 					<div class="right-top-bar flex-w h-full">
 						
 
-						<a href="#" class="flex-c-m trans-04 p-lr-25">
-							Mi Cuenta
+						<?php 
+						
+						if(isset($_SESSION['login'])){
+							$usuario = $_SESSION['userData'];
+						?>
+
+						<a href="<?=base_url();?>/perfil" class="flex-c-m trans-04 p-lr-25">
+							Perfil
+						</a>
+						<a href="<?=base_url();?>/logoutCliente" class="flex-c-m trans-04 p-lr-25">
+							Cerrar Sesion
 						</a>
 
-						<a href="#" class="flex-c-m trans-04 p-lr-25">
-						Iniciar Sesión
-						</a>
+						<?php }else{ ?>
+						<button type="button" class="btn btn-primary" onclick="openModal2();">
+  						Iniciar Sesion
+						</button>
+
+						<?php }?>
 
 					</div>
 				</div>
 			</div>
 
-			<div class="wrap-menu-desktop">
+			<div id ="menu" class="wrap-menu-desktop">
 				<nav class="limiter-menu-desktop container">
 					
 					<!-- Logo desktop -->		
@@ -88,31 +114,60 @@
 								<a href="<?=base_url();?>/tienda">Tienda</a>
 							</li>
 
+							<li>
+								<a href="<?= base_url(); ?>/carrito">Carrito</a>
+							</li>	
+
 							
+						<?php 
+						
+						if(isset($_SESSION['login'])){
+						?>
 
 							<li>
 								<a href="<?=base_url();?>/foro">Foro</a>
 							</li>
+
+							<!- ------------------------------------------->
+								<?php 
+								$usu =  $_SESSION['userData'];
+								if($usu['nombrerol'] != "Cliente"){ ?>
+
+								<li>
+								<a href="<?=base_url();?>/dashboard">Dashboard</a>
+								</li>
+								<?php }?>
+								<!- ------------------------------------------->
+
+						<?php }else{ ?>
+
+							<li>
+								<a href="#"  onclick="openModal2();">Foro</a>
+							</li>				
+
+						<?php }?>
 
 							<li>
 								<a href="<?=base_url();?>/nosotros">Acerca de nosotros</a>
 							</li>
 
 							<li>
-								<a href="#footer">Contactos</a>
+								<a href="<?=base_url();?>/contacto">Contactos</a>
 							</li>
 						</ul>
 					</div>	
 
 					<!-- Icon header -->
 					<div  class="wrap-icon-header flex-w flex-r-m">
-						<div style="display: none;" class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 js-show-modal-search">
+						<div  class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 js-show-modal-search">
 							<i class="zmdi zmdi-search"></i>
 						</div>
 
-						<div class="icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti js-show-cartNo" data-notify="0">
+						<?php if($data['page_name'] != "carrito"){ ?>
+						<div class="cantCarrito icon-header-item cl2 hov-cl1 trans-04 p-l-22 p-r-11 icon-header-noti js-show-cart" data-notify="<?= $cantCarrito; ?> ">
 							<i class="zmdi zmdi-shopping-cart"></i>
 						</div>
+						<?php } ?>
 
 				
 					</div>
@@ -133,9 +188,11 @@
 					<i class="zmdi zmdi-search"></i>
 				</div>
 
-				<div class="icon-header-item cl2 hov-cl1 trans-04 p-r-11 p-l-10 icon-header-noti js-show-cart" data-notify="2">
+				<?php if($data['page_name'] != "carrito"){ ?>
+				<div class="cantCarrito icon-header-item cl2 hov-cl1 trans-04 p-r-11 p-l-10 icon-header-noti js-show-cart" data-notify="<?= $cantCarrito; ?>">
 					<i class="zmdi zmdi-shopping-cart"></i>
 				</div>
+				<?php } ?>
 
 			
 			</div>
@@ -192,6 +249,10 @@
 					<a href="<?=base_url();?>/tienda">Tienda</a>
 				</li>
 
+				<li>
+					<a href="<?= base_url(); ?>/carrito">Carrito</a>
+				</li>
+
 
 				<li>
 					<a href="<?=base_url();?>/foro">Foro</a>
@@ -214,12 +275,35 @@
 					<img src="<?=media();?>/tienda/images/icons/icon-close2.png" alt="CLOSE">
 				</button>
 
-				<form class="wrap-search-header flex-w p-l-15">
+				<form class="wrap-search-header flex-w p-l-15" method = "get" action="<?= base_url()?>/tienda/search">
 					<button class="flex-c-m trans-04">
 						<i class="zmdi zmdi-search"></i>
 					</button>
-					<input class="plh3" type="text" name="search" placeholder="Buscar...">
+					<input type="hidden" name="p" value="1">
+					<input class="plh3" type="text" name="s" placeholder="Buscar...">
 				</form>
 			</div>
 		</div>
 	</header>
+
+	<!-- Cart -->
+<div class="wrap-header-cart js-panel-cart">
+		<div class="s-full js-hide-cart"></div>
+
+		<div class="header-cart flex-col-l p-l-65 p-r-25">
+			<div class="header-cart-title flex-w flex-sb-m p-b-8">
+				<span class="mtext-103 cl22">
+					Carrito de compras
+				</span>
+
+				
+				<div class="fs-35 lh-10 cl22 p-lr-5 pointer hov-cl1 trans-04 js-hide-cart">
+					<i class="zmdi zmdi-close"></i>
+				</div>
+			</div>
+			
+			<div id = "productosCarrito" class="header-cart-content flex-w js-pscroll">
+			<?php getModal('modalCarrito',$data); ?>
+			</div>
+		</div>
+	</div>

@@ -37,6 +37,12 @@ function footerAdmin($data=""){
     $view_header =  "Views/Template/header_tienda.php";
     require_once($view_header);
     }
+
+     //funcionn para  que  se  vea laa  vista header
+ function headerForo($data=""){
+    $view_headerforo =  "Views/Template/header_foro.php";
+    require_once($view_headerforo);
+    }
     
     //funncion  para  que  se veaa la vista footer
     function footerTienda($data=""){
@@ -53,6 +59,14 @@ function dep($data){
     $format = print_r('</pre>');
 
     return $format;
+
+}
+
+function getFile(string $url, $data){
+
+    require_once("Views/{$url}.php");
+    $file = ob_get_clean();
+    return $file;
 
 }
 
@@ -155,6 +169,10 @@ function formatMoney($cantidad){
     $cantidad = number_format($cantidad,2,SPD,SPM);
     return $cantidad;
 }
+
+
+
+
 
 
 

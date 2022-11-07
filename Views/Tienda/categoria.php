@@ -1,5 +1,5 @@
 <?php headerTienda($data); 
-	getModal('modalCarrito',$data);
+	
     $arrProductos = $data['productos'];
 ?>
  <link rel="stylesheet" type="text/css" href="<?=media();?>/css/menu.css">

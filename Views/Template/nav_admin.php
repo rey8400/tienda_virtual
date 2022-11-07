@@ -8,6 +8,15 @@
         </div>
       </div>
       <ul class="app-menu">
+
+
+      <li>
+            <a class="app-menu__item" href="<?= base_url(); ?>/">
+                <i class="app-menu__icon fa fa-globe"></i>
+                <span class="app-menu__label">Pagina Web</span>
+            </a>
+        </li>
+
         <?php if(!empty($_SESSION['permisos'][1]['r'])){ ?>
         <li>
             <a class="app-menu__item" href="<?= base_url(); ?>/dashboard">
